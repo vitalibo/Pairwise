@@ -4,6 +4,8 @@ import org.testng.internal.collections.Pair;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 final class TestHelper {
 
@@ -21,28 +23,14 @@ final class TestHelper {
             .collect(HashMap::new, (m, v) -> m.put(v.first(), v.second()), HashMap::putAll));
     }
 
+    static Case case_(Object... values) {
+        return new Case(IntStream.range(0, values.length)
+            .mapToObj(i -> new Pair<>("key" + i, values[i]))
+            .collect(HashMap::new, (m, p) -> m.put(p.first(), p.second()), Map::putAll));
+    }
+
     static Pair<String, Object> pair(String name, Object value) {
         return new Pair<>(name, value);
-    }
-
-    static Pair<String, Object> a(Object value) {
-        return pair("A", value);
-    }
-
-    static Pair<String, Object> b(Object value) {
-        return pair("B", value);
-    }
-
-    static Pair<String, Object> c(Object value) {
-        return pair("C", value);
-    }
-
-    static Pair<String, Object> d(Object value) {
-        return pair("D", value);
-    }
-
-    static Pair<String, Object> e(Object value) {
-        return pair("E", value);
     }
 
 }
