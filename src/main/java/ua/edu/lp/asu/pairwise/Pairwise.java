@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Pairwise implements Iterable<Case> {
 
@@ -46,7 +47,22 @@ public class Pairwise implements Iterable<Case> {
         }
 
         public Pairwise build() {
-            return new Pairwise(parameters, null);
+            final Case prototype = parameters.stream()
+                .collect(Case::new, (o, p) -> o.put(p.getName(), null), Case::putAll);
+
+            return new Pairwise(parameters,
+                InParameterOrderStrategy
+                    .generatePairs(parameters).stream()
+                    .reduce(new ArrayList<>(), (cases, pairs) -> {
+                        if (cases.isEmpty()) return pairs;
+                        cases = InParameterOrderStrategy
+                            .horizontalGrowth(cases, pairs);
+                        cases.addAll(InParameterOrderStrategy
+                            .verticalGrowth(pairs));
+                        return cases;
+                    }).stream()
+                    .map(c -> prototype.clone().union(c))
+                    .collect(Collectors.toList()));
         }
 
     }

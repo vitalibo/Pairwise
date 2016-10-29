@@ -21,6 +21,11 @@ public class Case extends LinkedHashMap<String, Object> implements Cloneable {
             .isPresent();
     }
 
+    public Case union(Case pair) {
+        this.putAll(pair);
+        return this;
+    }
+
     @Override
     public Case clone() {
         return new Case(this);
