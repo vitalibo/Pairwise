@@ -18,18 +18,18 @@ final class TestHelper {
     }
 
     @SafeVarargs
-    static Case case_(Pair<String, Object>... pairs) {
+    static Case pairs(Pair<String, Object>... pairs) {
         return new Case(Arrays.stream(pairs)
             .collect(HashMap::new, (m, v) -> m.put(v.first(), v.second()), HashMap::putAll));
     }
 
-    static Case case_(Object... values) {
+    static Case pairs(Object... values) {
         return new Case(IntStream.range(0, values.length)
             .mapToObj(i -> new Pair<>("key" + i, values[i]))
             .collect(HashMap::new, (m, p) -> m.put(p.first(), p.second()), Map::putAll));
     }
 
-    static Pair<String, Object> pair(String name, Object value) {
+    static Pair<String, Object> tuple(String name, Object value) {
         return new Pair<>(name, value);
     }
 
