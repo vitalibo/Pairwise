@@ -3,9 +3,7 @@ package ua.edu.lp.asu.pairwise;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,6 +31,8 @@ public class Pairwise implements Iterable<Case> {
 
     public static class Builder {
 
+        private static Random random = new Random();
+
         @Getter
         @Setter
         private List<Parameter<?>> parameters;
@@ -54,6 +54,8 @@ public class Pairwise implements Iterable<Case> {
         public Pairwise build() {
             final Case prototype = parameters.stream()
                 .collect(Case::new, (o, p) -> o.put(p.getName(), null), Case::putAll);
+            final Map<String, Object[]> params = parameters.stream()
+                .collect(Collectors.toMap(Parameter::getName, List::toArray));
 
             return new Pairwise(parameters,
                 InParameterOrderStrategy
@@ -67,7 +69,15 @@ public class Pairwise implements Iterable<Case> {
                         return cases;
                     }).stream()
                     .map(c -> prototype.clone().union(c))
+                    .peek(c -> c.putAll(c.entrySet().stream()
+                        .filter(e -> e.getValue() == null)
+                        .peek(e -> e.setValue(random(params.get(e.getKey()))))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))))
                     .collect(Collectors.toList()));
+        }
+
+        private static Object random(Object[] array) {
+            return array[random.nextInt(array.length)];
         }
 
     }
