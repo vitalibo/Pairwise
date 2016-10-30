@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Pairwise implements Iterable<Case> {
 
@@ -24,6 +25,10 @@ public class Pairwise implements Iterable<Case> {
     @Override
     public Iterator<Case> iterator() {
         return cases.iterator();
+    }
+
+    public Stream<Case> stream() {
+        return cases.stream();
     }
 
     public static class Builder {
