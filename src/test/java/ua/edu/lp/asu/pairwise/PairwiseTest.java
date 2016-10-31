@@ -47,19 +47,25 @@ public class PairwiseTest {
 
     @Test(dataProvider = "samplesParameters")
     public void testBuild(List<Parameter<?>> parameters) {
-        final List<Case> pairs = InParameterOrderStrategy
-            .generatePairs(parameters)
-            .stream()
-            .flatMap(Collection::stream)
-            .collect(Collectors.toList());
-
         Pairwise pairwise = new Pairwise.Builder()
             .withParameters(parameters)
             .build();
 
         Assert.assertEquals(pairwise.getParameters(), parameters);
         Assert.assertFalse(pairwise.getCases().isEmpty());
-        pairs.forEach(pair -> Assert.assertTrue(matches(pairwise, pair)));
+        Assert.assertTrue(pairwise.verify().isEmpty());
+    }
+
+    @Test(dataProvider = "samplesParameters")
+    public void testVerify(List<Parameter<?>> parameters) {
+        Pairwise pairwise = new Pairwise.Builder()
+            .withParameters(parameters)
+            .build();
+
+        Assert.assertTrue(pairwise.verify().isEmpty());
+
+        pairwise.getCases().remove(0);
+        Assert.assertFalse(pairwise.verify().isEmpty());
     }
 
     @Test(dataProvider = "samplesParameters")
@@ -75,14 +81,6 @@ public class PairwiseTest {
                 .collect(Collectors.toList()))
             .forEach(l -> IntStream.range(0, l.size())
                 .forEach(i -> Assert.assertTrue(parameters.get(i).contains(l.get(i)))));
-    }
-
-    private static boolean matches(Pairwise pairwise, Case pair) {
-        return pairwise.getCases()
-            .stream()
-            .filter(pair::matches)
-            .findFirst()
-            .isPresent();
     }
 
 }

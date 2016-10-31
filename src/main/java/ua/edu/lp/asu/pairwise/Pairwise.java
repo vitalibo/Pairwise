@@ -20,6 +20,18 @@ public class Pairwise implements Iterable<Case> {
         this.cases = cases;
     }
 
+    public List<Case> verify() {
+        return InParameterOrderStrategy
+            .generatePairs(parameters)
+            .stream()
+            .flatMap(List::stream)
+            .filter(pair -> !stream()
+                .filter(pair::matches)
+                .findFirst()
+                .isPresent())
+            .collect(Collectors.toList());
+    }
+
     public Object[][] toTestNG() {
         return stream()
             .map(Map::values)
