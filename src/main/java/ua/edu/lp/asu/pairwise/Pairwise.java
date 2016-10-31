@@ -20,6 +20,21 @@ public class Pairwise implements Iterable<Case> {
         this.cases = cases;
     }
 
+    public Object[][] toTestNG() {
+        return stream()
+            .map(Map::values)
+            .map(Collection::toArray)
+            .collect(Collectors.toList())
+            .toArray(new Object[0][0]);
+    }
+
+    public Collection<Object[]> toJUnit() {
+        return stream()
+            .map(Map::values)
+            .map(Collection::toArray)
+            .collect(Collectors.toList());
+    }
+
     @Override
     public Iterator<Case> iterator() {
         return cases.iterator();

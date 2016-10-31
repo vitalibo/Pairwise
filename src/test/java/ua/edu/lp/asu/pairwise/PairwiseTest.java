@@ -7,7 +7,9 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static ua.edu.lp.asu.pairwise.TestHelper.parameter;
 
@@ -58,6 +60,21 @@ public class PairwiseTest {
         Assert.assertEquals(pairwise.getParameters(), parameters);
         Assert.assertFalse(pairwise.getCases().isEmpty());
         pairs.forEach(pair -> Assert.assertTrue(matches(pairwise, pair)));
+    }
+
+    @Test(dataProvider = "samplesParameters")
+    public void testOrder(List<Parameter<?>> parameters) {
+        Pairwise pairwise = new Pairwise.Builder()
+            .withParameters(parameters)
+            .build();
+
+        pairwise.stream()
+            .map(Map::entrySet)
+            .map(Collection::stream)
+            .map(c -> c.map(Map.Entry::getValue)
+                .collect(Collectors.toList()))
+            .forEach(l -> IntStream.range(0, l.size())
+                .forEach(i -> Assert.assertTrue(parameters.get(i).contains(l.get(i)))));
     }
 
     private static boolean matches(Pairwise pairwise, Case pair) {
