@@ -1,5 +1,7 @@
 ### Pairwise
 
+[![Build Status](https://travis-ci.org/vitalibo/Pairwise.svg?branch=master)](https://travis-ci.org/vitalibo/Pairwise)
+
 Pairwise is open-source library for the generating minimal set of test combinations. The project is implemented In-Parameter-Order (IPO) a strategy for generate test cases.
 
 #### Installation
