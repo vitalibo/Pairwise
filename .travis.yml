@@ -1,5 +1,12 @@
 language: java
+
+os: linux
+
+dist: xenial
+
 jdk:
-  - oraclejdk8
-sudo: false
+  - openjdk8
+  - openjdk11
+  - openjdk14
+
 script: mvn test
