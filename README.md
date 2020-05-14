@@ -1,18 +1,18 @@
-### Pairwise
+# Pairwise
 
 [![Build Status](https://travis-ci.org/vitalibo/Pairwise.svg?branch=master)](https://travis-ci.org/vitalibo/Pairwise)
 
 Pairwise is open-source library for the generating minimal set of test combinations. The project is implemented In-Parameter-Order (IPO) a strategy for generate test cases.
 
-#### Installation
+## Installation
 
-```
+```bash
 mvn clean install
 ```
 
 Now you can use library in your projects, include in `pom.xml` the following dependency
 
-```
+```xml
 <dependency>
     <groupId>ua.edu.lp.asu</groupId>
     <artifactId>pairwise</artifactId>
@@ -20,11 +20,11 @@ Now you can use library in your projects, include in `pom.xml` the following dep
 </dependency>
 ```
 
-#### Usage
+## Usage
 
 Example using generating test cases
 
-```
+```java
 Pairwise pairwise = new Pairwise.Builder()
     .withParameters(Arrays.asList(
         new Parameter<>("Platform", Platform.x86, Platform.ia64, Platform.amd64),
@@ -41,20 +41,20 @@ for (Case o : pairwise) {
 }
 ```
 
-This is output of generating test cases. Each of the following lines represents one generated test case. 
+This is output of generating test cases. Each of the following lines represents one generated test case.
 
-```
-No. | Platform | CPUs   | RAM   | HDD  | Operating system | Internet Explorer | Application 
+```log
+No. | Platform | CPUs   | RAM   | HDD  | Operating system | Internet Explorer | Application
 ----+----------+--------+-------+------+------------------+-------------------+-------------
-  0 | amd64    | Quad   | 128MB | IDE  | NT4@5910e440     | 4.0               | SQLServer   
-  1 | x86      | Single | 1GB   | SCSI | NT4@5910e440     | 5.0               | Office      
-... | ...      | ...    | ...   | ...  | ...              | ...               | ...             
- 17 | ia64     | Dual   | 4GB   | SCSI | WinXP@533ddba    | 5.5               | Exchange 
+  0 | amd64    | Quad   | 128MB | IDE  | NT4@5910e440     | 4.0               | SQLServer
+  1 | x86      | Single | 1GB   | SCSI | NT4@5910e440     | 5.0               | Office
+... | ...      | ...    | ...   | ...  | ...              | ...               | ...
+ 17 | ia64     | Dual   | 4GB   | SCSI | WinXP@533ddba    | 5.5               | Exchange
 ```
 
 Also, you can use pairwise testing with TestNG as @DataProvider
 
-```
+```java
 @DataProvider
 public Object[][] source() {
     return new Pairwise.Builder()
@@ -75,7 +75,7 @@ public void test(String type, Integer size, Fs fs, Integer cluster, Boolean comp
 
 or running parameterized test in JUnit 4
 
-```
+```java
 @Parameterized.Parameters
 public static Collection<Object[]> source() {
     return new Pairwise.Builder()
